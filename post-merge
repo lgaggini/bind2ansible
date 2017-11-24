@@ -1,0 +1,21 @@
+#!/usr/bin/bash
+#
+# Author: Lorenzo Gaggini - lg@lgaggini.net
+# Post merge hook to update ansible inventory on bind
+# zone updates pulled from git
+#
+
+# regexp to match zone files on the git repo to monitor for changes
+bind_zone_regexp="/bind/files/zones/"
+# command to run on monitored files changes, the awk part removes
+# duplicate domains based on the last level, the firs zone has the precedence
+bind2ansible_cmd="/usr/local/bin/bind2ansible.sh | awk -F"." '!x[($1)]++'"
+# where to write the ansible static inventory
+ansible_inventory="/etc/ansible/hosts"
+changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+
+check_run() {
+    echo "$changed_files" | grep -E --quiet "$1" && eval "$2"
+}
+
+check_run "${bind_zone_regexp}" "${bind2ansible_cmd} > ${ansible_inventory}"
