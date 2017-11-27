@@ -18,4 +18,5 @@ check_run() {
     echo "$changed_files" | grep -E --quiet "$1" && eval "$2"
 }
 
-check_run "${bind_zone_regexp}" "${bind2ansible_cmd} > ${ansible_inventory}"
+echo "Updating the ansible inventory"
+check_run "${bind_zone_regexp}" "\${bind2ansible_cmd} > \${ansible_inventory}"
