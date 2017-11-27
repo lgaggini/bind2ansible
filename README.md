@@ -2,6 +2,11 @@
 
 bind2ansible is a tool to generate ansible static inventory from bind9 zones files. It's intended to be runned on a post-merge hook (example included) on the repo which hosts the bind zones files but it could be runned also manually.
 
+## Constraints
+* bind zones files are all in the same directory and they are named: db.{{ 2ndlevelel }}.{{ tld }}
+* clusters hosts are named: {{ cluster }}{{ index }}.{{ 2ndlevelel }}.{{ tld }}
+* index identifies if the host is an integration host (>90), a staging host (<90, >80) or production hosts (<90)
+
 ## Configuration
 At the top of both scripts there are configuration settings:
 
