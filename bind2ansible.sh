@@ -40,17 +40,19 @@ for zone in ${zones[@]}; do
             dec_index=$((10#${index}))
             case 1 in
                 $((${dec_index}<80 && ${prod}==0)))
+                    echo
                     echo "[${cluster}]"
                     prod=1;;
                 $((${dec_index}>=80 && ${dec_index} < 90 && ${stg}==0)))
+                    echo
                     echo "[${cluster}-stg]"
                     stg=1;;
                 $((${dec_index}>=90 && ${int}==0)))
+                    echo
                     echo "[${cluster}-int]"
                     int=1;;
             esac
             echo "${cluster}${index}.${zone:3}${custom_port}"
         done
     done
-    echo
 done
