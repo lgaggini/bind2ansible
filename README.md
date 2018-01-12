@@ -21,6 +21,8 @@ custom_port=""
 zones_path="/bind/files/zones/"
 # zones filename to parse
 zones=(db.my.zone1 db.my.zone2)
+# start to parse after this line
+parse_after="SERVER LINUX"
 # line (records) to include
 include_filter=" A "
 # lines (vip, windows cluster, etc..) to exclude
