@@ -72,7 +72,7 @@ class BindInventory(object):
         zones = self.zones
         include = self.include
         exclude = self.exclude
-        inventory = {}
+        inventory = {'_meta': {'hostvars':{}}}
         for zone in zones:
             zone_path = self.get_zone_path(zone)
             clusters = self.get_clusters(zone_path)
