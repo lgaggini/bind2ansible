@@ -13,7 +13,7 @@ git clone https://github.com/lgaggini/bind2ansible.git
 ```
 
 ## Configuration
-At the top of both scripts there are configuration settings:
+At the top of bash scripts and in the `bind.ini` there are configuration settings:
 
 ### bind2ansible.sh
 
@@ -45,6 +45,17 @@ bind2ansible_cmd="/usr/local/bin/bind2ansible.sh | awk -F"." '!x[($1)]++'"
 # where to write the ansible static inventory
 ansible_inventory="/etc/ansible/hosts"
 ```
+
+### bind.ini
+```
+[bind]
+
+zones_path = /bind/files/zones/
+zones = db.my.zone1,db.my.zone2
+include_filter = "\sA\s"
+exclude_filter = "^;|vip"
+```
+
 
 ## Run
 ### Manual Run
