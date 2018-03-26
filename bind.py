@@ -46,7 +46,7 @@ class BindInventory(object):
             self.inventory = self._empty_inventory()
         # if no groups or vars are present, return an empty inventory.
         else:
-            self.inventory = self.empty_inventory()
+            self.inventory = self._empty_inventory()
 
         print json.dumps(self.inventory)
 
