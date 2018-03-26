@@ -101,15 +101,20 @@ class BindInventory(object):
                         continue
                     idxn = int(idx)
                     if idxn < 80 and not prod:
+                        suffix = ''
                         inventory[cluster]['hosts'] = []
                         prod = True
                     elif idxn >= 80 and idxn < 90 and not stg:
-                        inventory[cluster]['hosts'] = []
+                        suffix = '-stg'
+                        inventory[cluster+suffix] = {}
+                        inventory[cluster+suffix]['hosts'] = []
                         stg = True
                     elif idxn >= 90 and not dev:
-                        inventory[cluster]['hosts'] = []
+                        suffix = '-int'
+                        inventory[cluster+suffix] = {}
+                        inventory[cluster+suffix]['hosts'] = []
                         dev = True
-                    inventory[cluster]['hosts'].append(host)
+                    inventory[cluster+suffix]['hosts'].append(host)
         return inventory
 
     # get a list of cluster
