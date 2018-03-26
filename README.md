@@ -7,6 +7,11 @@ bind2ansible is a tool to generate ansible static inventory from bind9 zones fil
 * clusters hosts are named: {{ cluster }}{{ index }}.{{ 2ndlevelel }}.{{ tld }}
 * index identifies if the host is an integration host (>90), a staging host (<90, >80) or production hosts (<90)
 
+## Installation
+```bash
+git clone https://github.com/lgaggini/bind2ansible.git
+```
+
 ## Configuration
 At the top of both scripts there are configuration settings:
 
@@ -44,11 +49,16 @@ ansible_inventory="/etc/ansible/hosts"
 ## Run
 ### Manual Run
 ```bash
-/bind2ansible.sh
+cd bind2ansible
+./bind2ansible.sh
 ```
 
 ### Post Merge Hook Run
 Copy the post-merge script on your repo in the .git/hook folder and if the settings are ok on first git pull including files matching the `bind_zone_regexp` the script will be launched.
 
-## Future plan
-A dynamic inventory script (json output) for ansible implementing the same concept
+### Dynamic inventory Run
+Now also a dynamic inventory version is present, you can use it:
+```bash
+cd bind2ansible
+ansible -i bind.py {{ group or host }} -m ping
+```
