@@ -7,16 +7,21 @@
 
 # regexp to match zone files on the git repo to monitor for changes
 bind_zone_regexp="/bind/files/zones/"
-# command to run on monitored files changes, the awk part removes
-# duplicate domains based on the last level, the firs zone has the precedence
-bind2ansible_cmd="/usr/local/bin/bind2ansible.sh | awk -F"." '!a[($1)]++'"
 # where to write the ansible static inventory
 ansible_inventory="/etc/ansible/hosts"
+# command to run on monitored files changes, the awk part removes
+# duplicate domains based on the last level, the first zone defined
+# in bind2ansible has the precedence
+bind2ansible(){
+    /home/lg/code/dada/bind2ansible/bind2ansible.sh | awk -F"." '!a[($1)]++' > $ansible_inventory
+}
+
 changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
 
-check_run() {
-    echo "$changed_files" | grep -E --quiet "$1" && eval "$2"
+update_modified() {
+    echo "$changed_files" | grep -E --quiet "$1" && bind2ansible
 }
 
 echo "Updating the ansible inventory"
-check_run "${bind_zone_regexp}" "\${bind2ansible_cmd} > \${ansible_inventory}"
+#update_modified $bind_zone_regexp
+bind2ansible

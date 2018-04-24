@@ -38,12 +38,14 @@ exclude_filter="^;"
 ```bash
 # regexp to match zone files on the git repo to monitor for changes
 bind_zone_regexp="/bind/files/zones/"
+# where to write the ansible static inventory
+ansible_inventory="/etc/ansible/hosts"
 # command to run on monitored files changes, the awk part removes
 # duplicate domains based on the last level, the first zone defined
 # in bind2ansible has the precedence
-bind2ansible_cmd="/usr/local/bin/bind2ansible.sh | awk -F"." '!a[($1)]++'"
-# where to write the ansible static inventory
-ansible_inventory="/etc/ansible/hosts"
+bind2ansible(){
+    /usr/local/bin/bind2ansible.sh | awk -F"." '!a[($1)]++' > $ansible_inventory
+}
 ```
 
 ### bind.ini
