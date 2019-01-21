@@ -30,7 +30,7 @@ echo
 
 # common zones
 for zone in ${zones[@]}; do
-    clusters=$(cat ${zones_path}${zone} | sed -e "1,/$parse_after/d" | grep ${include_filter} | awk '{print $1}' | sort | uniq | grep -vE ${exclude_filter} | sed 's/[^a-Z-]//g' | uniq -c | awk '($1 > 1 )' | awk '{print $2}' | sort | uniq)
+    clusters=$(cat ${zones_path}${zone} | sed -e "1,/$parse_after/d" | grep ${include_filter} | awk '{print $1}' | sort | uniq | grep -vE ${exclude_filter} | sed 's/[^[:alpha:]-]//g' | uniq -c | awk '($1 > 1 )' | awk '{print $2}' | sort | uniq)
     for cluster in $clusters; do
         prod=0
         stg=0
