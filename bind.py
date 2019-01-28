@@ -75,6 +75,7 @@ class BindInventory(object):
         self.include = config.get('bind', 'include_filter').strip('"')
         self.exclude = config.get('bind', 'exclude_filter').strip('"')
         self.loglevel = config.get('bind', 'loglevel').strip('"')
+        self.start = config.get('bind', 'start').strip('"')
 
     # parse the bind zone files
     def zones_parse(self):
@@ -124,12 +125,17 @@ class BindInventory(object):
         basepath = self.basepath
         include = self.include
         exclude = self.exclude
+        start = self.start
         clusters = Set()
         with open(zone_path, 'r') as zone_src:
             # strip out empty lines
             lines = filter(None, (line.rstrip() for line in zone_src))
+            started = False
             for l in lines:
-                if re.search(include, l) and not re.search(exclude, l):
+                if not started and start in l:
+                    started = True
+                elif re.search(include, l) and not re.search(exclude, l) and \
+                  started:
                     self.logger.debug(l.split()[0].translate(None, digits))
                     clusters.add(l.split()[0].translate(None, digits))
         return sorted(clusters)
@@ -139,7 +145,7 @@ class BindInventory(object):
         idxs = Set()
         with open(zone_path, 'r') as zone_src:
             for l in zone_src:
-                if l.startswith(cluster) and \
+                if re.match('^%s\d+' % cluster, l) and \
                    re.search(self.include, l) and \
                    not re.search(self.exclude, l):
                     idx = l.split()[0].translate(None, letters)
