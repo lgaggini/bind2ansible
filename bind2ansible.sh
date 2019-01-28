@@ -35,7 +35,7 @@ for zone in ${zones[@]}; do
         prod=0
         stg=0
         int=0
-        indexes=$(cat ${zones_path}${zone} | awk '{print $1}' | sort | uniq | grep -vE "^;" | grep "^${cluster}" | sed 's/[^0-9]//g' | sort | uniq)
+        indexes=$(cat ${zones_path}${zone} | awk '{print $1}' | sort | uniq | grep -vE "^;" | grep "^${cluster}[0-9]" | sed 's/[^0-9]//g' | sort | uniq)
         for index in $indexes; do
             dec_index=$((10#${index}))
             case 1 in
