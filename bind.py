@@ -33,16 +33,17 @@ class BindInventory(object):
         return {'_meta': {'hostvars': {}}}
 
     # init the log
-    def _log_init(self):
+    def _log_init(self, loglevel):
         self.logger = logging.getLogger('bind')
         FORMAT = '%(asctime)s %(levelname)s %(module)s %(message)s'
-        logging.basicConfig(format=FORMAT, level=logging.INFO)
+        logging.basicConfig(format=FORMAT, level=getattr(logging,
+                                                         loglevel))
 
     def __init__(self):
         self.inventory = self._empty_inventory()
         self.read_cli()
         self.read_settings()
-        self._log_init()
+        self._log_init(self.loglevel)
 
         # called with `--list`.
         if self.args.list:
@@ -73,6 +74,7 @@ class BindInventory(object):
         self.zones = config.get('bind', 'zones').split(',')
         self.include = config.get('bind', 'include_filter').strip('"')
         self.exclude = config.get('bind', 'exclude_filter').strip('"')
+        self.loglevel = config.get('bind', 'loglevel').strip('"')
 
     # parse the bind zone files
     def zones_parse(self):
