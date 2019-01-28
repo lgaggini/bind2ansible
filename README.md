@@ -56,6 +56,8 @@ zones_path = /bind/files/zones/
 zones = db.my.zone1,db.my.zone2
 include_filter = "\sA\s"
 exclude_filter = "^;|vip"
+loglevel = "INFO"
+start = "PARSE AFTER HERE"
 ```
 
 
