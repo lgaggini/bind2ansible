@@ -30,12 +30,12 @@ echo
 
 # common zones
 for zone in ${zones[@]}; do
-    clusters=$(cat ${zones_path}${zone} | sed -e "1,/$parse_after/d" | grep ${include_filter} | awk '{print $1}' | sort | uniq | grep -vE ${exclude_filter} | sed 's/[^[:alpha:]-]//g' | uniq -c | awk '($1 > 1 )' | awk '{print $2}' | sort | uniq)
+    clusters=$(cat ${zones_path}${zone} | sed -e "1,/$parse_after/d" | grep ${include_filter} | awk '{print $1}' | sort | uniq | grep -vE ${exclude_filter} | sed 's/[^[:alpha:]-]\+$//g' | uniq -c | awk '($1 > 1 )' | awk '{print $2}' | sort | uniq)
     for cluster in $clusters; do
         prod=0
         stg=0
         int=0
-        indexes=$(cat ${zones_path}${zone} | awk '{print $1}' | sort | uniq | grep -vE "^;" | grep "^${cluster}[0-9]" | sed 's/[^0-9]//g' | sort | uniq)
+        indexes=$(cat ${zones_path}${zone} | awk '{print $1}' | sort | uniq | grep -vE "^;" | grep "^${cluster}[0-9]" | sed 's/[0-9]\?[^0-9]//g' | sort | uniq)
         for index in $indexes; do
             dec_index=$((10#${index}))
             case 1 in
