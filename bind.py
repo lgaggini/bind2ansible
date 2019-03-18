@@ -136,8 +136,11 @@ class BindInventory(object):
                     started = True
                 elif re.search(include, l) and not re.search(exclude, l) and \
                   started:
-                    self.logger.debug(l.split()[0].translate(None, digits))
-                    clusters.add(l.split()[0].translate(None, digits))
+                    host = l.split()[0]
+                    cluster = '%s%s' % (host[:1],
+                                        host[1:].translate(None, digits))
+                    self.logger.debug(cluster)
+                    clusters.add(cluster)
         return sorted(clusters)
 
     # get a list of indexes for cluster
@@ -148,7 +151,7 @@ class BindInventory(object):
                 if re.match('^%s\d+' % cluster, l) and \
                    re.search(self.include, l) and \
                    not re.search(self.exclude, l):
-                    idx = l.split()[0].translate(None, letters)
+                    idx = l.split()[0][1:].translate(None, letters)
                     idxs.add(idx.translate(None, punctuation))
         return sorted(idxs)
 
